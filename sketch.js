@@ -1,6 +1,7 @@
 const lineLength = 570;
 //const fov = 180;
-const fov = 70;
+let fov = 150;
+let slider;
 
 const sceneW = 400;
 const sceneH = 400;
@@ -16,11 +17,10 @@ let rayInc = 0;
 function setup() {
     createCanvas(800, 400);
     background(0);
+    slider = createSlider(0, 360, 75);
 
     x3 = sceneW/2;
     y3 = sceneH/2;
-
-    rayInc = fov/sceneW;
 
     for (let i = 0; i < 3; ++i)
     {
@@ -40,6 +40,9 @@ function setup() {
 
 function draw() {
     background(0);
+
+    fov = slider.value();
+    rayInc = fov/sceneW;
 
     fill(100);
 
@@ -113,8 +116,7 @@ function draw() {
         // Translates position to the right side of the scene, to get a side by side view
         translate(sceneW, 0);
         let newAngle = dir-angle
-        //print ("dir - angle: " + newAngle);
-        let modifiedDistance = distance;// * cos(dir - angle);
+        let modifiedDistance = distance * cos(radians(dir - angle));
         let vert = map(modifiedDistance, 0, sceneW, sceneH, 0);
         let brightness = map(modifiedDistance, 0 , sceneW, 255, 0);
         fill(brightness);
