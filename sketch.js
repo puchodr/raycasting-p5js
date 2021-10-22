@@ -71,9 +71,9 @@ function draw() {
     {
         const angle = (dir-halfFOV) + (i * rayInc);
         //let shortLength = 800;
-        let shortLength = lineLength;
-        let x4 = x3+(cos(radians(angle)) * shortLength);
-        let y4 = y3+(sin(radians(angle)) * shortLength);
+        let distance = lineLength;
+        let x4 = x3+(cos(radians(angle)) * distance);
+        let y4 = y3+(sin(radians(angle)) * distance);
 
         for (let j = 0; j < walls.length; ++j)
         {
@@ -97,9 +97,9 @@ function draw() {
                     const tempY = y3 + (u * (y4 - y3));
                     const newLength = sqrt(pow (tempX - x3, 2) + pow (tempY - y3, 2));
 
-                    if (newLength < shortLength)
+                    if (newLength < distance)
                     {
-                        shortLength = newLength;
+                        distance = newLength;
                         x4 = tempX;
                         y4 = tempY;
                     }
@@ -112,7 +112,12 @@ function draw() {
         push();
         // Translates position to the right side of the scene, to get a side by side view
         translate(sceneW, 0);
-        let vert = map(shortLength, 0, lineLength, sceneH, 0);
+        let newAngle = dir-angle
+        //print ("dir - angle: " + newAngle);
+        let modifiedDistance = distance;// * cos(dir - angle);
+        let vert = map(modifiedDistance, 0, sceneW, sceneH, 0);
+        let brightness = map(modifiedDistance, 0 , sceneW, 255, 0);
+        fill(brightness);
         let yStart = (sceneH - vert) / 2;
         noStroke();
         rect(i, yStart, 1, vert)
