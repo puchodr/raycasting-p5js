@@ -1,6 +1,6 @@
-const lineLength = 300;
+const lineLength = 570;
 //const fov = 180;
-const fov = 75;
+const fov = 70;
 
 const sceneW = 400;
 const sceneH = 400;
@@ -22,7 +22,7 @@ function setup() {
 
     rayInc = fov/sceneW;
 
-    for (let i = 0; i < 6; ++i)
+    for (let i = 0; i < 3; ++i)
     {
         let x1 = random(sceneW);
         let y1 = random(sceneH);
@@ -65,11 +65,15 @@ function draw() {
         walls[i].draw();
     }
 
-    for (let i = dir-fov; i < dir+fov; i+=rayInc)
+    const halfFOV = fov/2;
+    //for (let i = dir-halfFOV; i < dir+halfFOV; i+=rayInc)
+    for (let i = 0; i < sceneW; ++i)
     {
+        const angle = (dir-halfFOV) + (i * rayInc);
+        //let shortLength = 800;
         let shortLength = lineLength;
-        let x4 = x3+(cos(radians(i)) * lineLength);
-        let y4 = y3+(sin(radians(i))*lineLength);
+        let x4 = x3+(cos(radians(angle)) * shortLength);
+        let y4 = y3+(sin(radians(angle)) * shortLength);
 
         for (let j = 0; j < walls.length; ++j)
         {
@@ -108,7 +112,10 @@ function draw() {
         push();
         // Translates position to the right side of the scene, to get a side by side view
         translate(sceneW, 0);
+        let vert = map(shortLength, 0, lineLength, sceneH, 0);
+        let yStart = (sceneH - vert) / 2;
         noStroke();
+        rect(i, yStart, 1, vert)
         //line(x3, y3, x4, y4);
 
         pop();
